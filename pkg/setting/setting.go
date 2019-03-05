@@ -25,8 +25,8 @@ func Load() {
 		log.Fatalf("setting.Load, fail to parse 'configs/main.ini': %v", err)
 	}
 
-	AppConfig.AppMode = configFile.Section("").Key("app_mode").MustString("dev")
-	AppConfig.Protocol = configFile.Section("server").Key("protocol").MustString("http")
-	AppConfig.HTTPPort = configFile.Section("port").Key("http_port").MustInt(8999)
-	AppConfig.TCPPort = configFile.Section("port").Key("tcp_port").MustInt(1314)
+	AppConfig.AppMode = configFile.Section("app").Key("app_mode").In("prod", []string{"prod", "dev", "debug"})
+	AppConfig.Protocol = configFile.Section("server").Key("protocol").In("http", []string{"http", "https", "tcp"})
+	AppConfig.HTTPPort = configFile.Section("server").Key("http_port").MustInt()
+	AppConfig.TCPPort = configFile.Section("server").Key("tcp_port").MustInt()
 }
