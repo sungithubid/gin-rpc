@@ -7,10 +7,11 @@ import (
 )
 
 type config struct {
-	AppMode  string
-	Protocol string
-	HTTPPort int
-	TCPPort  int
+	AppMode     string
+	Protocol    string
+	HTTPPort    int
+	TCPPort     int
+	RuntimePath string
 }
 
 // AppConfig setting info
@@ -29,4 +30,5 @@ func Load() {
 	AppConfig.Protocol = configFile.Section("server").Key("protocol").In("http", []string{"http", "https", "tcp"})
 	AppConfig.HTTPPort = configFile.Section("server").Key("http_port").MustInt()
 	AppConfig.TCPPort = configFile.Section("server").Key("tcp_port").MustInt()
+	AppConfig.RuntimePath = configFile.Section("app").Key("runtimePath").String()
 }
