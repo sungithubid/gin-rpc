@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
 	"log"
 
@@ -12,9 +13,9 @@ import (
 
 // CityInfo Ip
 type CityInfo struct {
-	CountryName string
-	RegionName  string
-	CityName    string
+	CountryName string `json:"countryName"`
+	RegionName  string `json:"regionName"`
+	CityName    string `json:"cityName"`
 }
 
 // init
@@ -23,7 +24,7 @@ func init() {
 }
 
 // IPLocate query
-func IPLocate(ip string) CityInfo {
+func IPLocate(ip string, c *gin.Context) string {
 	ipdbFilePath := fmt.Sprintf("%s%s", setting.AppConfig.RuntimePath, "ipipfree.ipdb")
 	db, err := ipdb.NewCity(ipdbFilePath)
 	if err != nil {
@@ -40,7 +41,9 @@ func IPLocate(ip string) CityInfo {
 	locate.CountryName = ipdbRes["country_name"]
 	locate.RegionName = ipdbRes["region_name"]
 	locate.CityName = ipdbRes["city_name"]
-	return locate
+	data, err := json.Marshal(locate)
+
+	return fmt.Sprintf("%s", data)
 }
 
 func main() {
